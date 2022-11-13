@@ -18,6 +18,7 @@ namespace MovieFlixApi.Controllers
         private readonly IConfiguration _configuration;
 
         //dependency injection the database connection class
+
         public ShowsController(IConfiguration configuration)
         {
             _configuration = configuration;
