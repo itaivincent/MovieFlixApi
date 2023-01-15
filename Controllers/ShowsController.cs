@@ -8,6 +8,8 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using MovieFlixApi.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace MovieFlixApi.Controllers
 {
@@ -26,6 +28,7 @@ namespace MovieFlixApi.Controllers
 
         //method to get all shows from the DB
        [HttpGet]
+       [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
        public JsonResult Get()
         {
             string query = @"
@@ -58,7 +61,7 @@ namespace MovieFlixApi.Controllers
         {
             string query = @"
                             insert into dbo.Shows 
-                            values(@Name,@Description,@Release_Date,@Image,@Date_Added,@Category)
+                            values(@Name,@Description,@Release_Date,@Image,@Date_Added,@Category,@User_Id,@Imdb_id)
                            ";
 
             DataTable table = new DataTable();
@@ -75,6 +78,8 @@ namespace MovieFlixApi.Controllers
                     myCommand.Parameters.AddWithValue("@Image", show.Image);
                     myCommand.Parameters.AddWithValue("@Date_Added", show.Date_Added);
                     myCommand.Parameters.AddWithValue("@Category", show.Category);
+                    myCommand.Parameters.AddWithValue("@User_id", show.User_id);
+                    myCommand.Parameters.AddWithValue("@Imdb_id",show.Imdb_id);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
@@ -86,6 +91,32 @@ namespace MovieFlixApi.Controllers
         }
 
 
+        //get all shows by a specific user
+        [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public JsonResult GetShow(int id)
+        {
+            string query = @"select * from dbo.Shows
+                            where User_id = @User_id";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("MovieFlixConnection");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@User_id", id);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
 
         //method to delete a show from the DB
         [HttpDelete("{id}")]

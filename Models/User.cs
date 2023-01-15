@@ -11,8 +11,9 @@ namespace MovieFlixApi.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public string DoB { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
-        public string confirm_password { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string Confirm_password { get; set; }
+        public string Token { get; set; }
     }
 }
