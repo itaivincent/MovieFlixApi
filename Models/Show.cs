@@ -16,6 +16,7 @@ namespace MovieFlixApi.Models
         public string Category { get; set; }
         public string User_id { get; set; }
         public string Imdb_id { get; set; }
+        public string IsWatched { get; set; } 
 
 
     }

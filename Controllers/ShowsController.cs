@@ -118,6 +118,36 @@ namespace MovieFlixApi.Controllers
             return new JsonResult(table);
         }
 
+
+        //this is a method to update a record in the database, the method type is patch
+        [HttpPut("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public JsonResult updateShow(int id)
+        {
+            //string query = @"select * from dbo.Shows
+            //                where User_id = @User_id"; 
+
+            string query = @"update dbo.Shows set IsWatched = 'True' where Id = @Id";
+
+            DataTable table = new DataTable();
+            string sqlDataSource = _configuration.GetConnectionString("MovieFlixConnection");
+            SqlDataReader myReader;
+            using (SqlConnection myCon = new SqlConnection(sqlDataSource))
+            {
+                myCon.Open();
+                using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                {
+                    myCommand.Parameters.AddWithValue("@Id", id);
+                    myReader = myCommand.ExecuteReader();
+                    table.Load(myReader);
+                    myReader.Close();
+                    myCon.Close();
+                }
+            }
+
+            return new JsonResult(table);
+        }
+
         //method to delete a show from the DB
         [HttpDelete("{id}")]
         public JsonResult Delete(int id)
