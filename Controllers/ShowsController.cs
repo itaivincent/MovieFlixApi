@@ -61,7 +61,7 @@ namespace MovieFlixApi.Controllers
         {
             string query = @"
                             insert into dbo.Shows 
-                            values(@Name,@Description,@Release_Date,@Image,@Date_Added,@Category,@User_Id,@Imdb_id)
+                            values(@Name,@Description,@Release_Date,@Image,@Date_Added,@Category,@User_Id,@Imdb_id,@IsWatched)
                            ";
 
             DataTable table = new DataTable();
@@ -80,6 +80,7 @@ namespace MovieFlixApi.Controllers
                     myCommand.Parameters.AddWithValue("@Category", show.Category);
                     myCommand.Parameters.AddWithValue("@User_id", show.User_id);
                     myCommand.Parameters.AddWithValue("@Imdb_id",show.Imdb_id);
+                    myCommand.Parameters.AddWithValue("@IsWatched", show.IsWatched);
                     myReader = myCommand.ExecuteReader();
                     table.Load(myReader);
                     myReader.Close();
