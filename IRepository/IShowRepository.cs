@@ -9,5 +9,7 @@ namespace MovieFlixApi.IRepository
     interface IShowRepository
     {
         Task<Show> Get(int objId);
+
+        Task<Show> Post();
     }
 }
