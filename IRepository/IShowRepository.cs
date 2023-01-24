@@ -11,5 +11,7 @@ namespace MovieFlixApi.IRepository
         Task<Show> Get(int objId);
 
         Task<Show> Post();
+
+        Task<Show> UpdateShow(int objId);
     }
 }
