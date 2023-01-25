@@ -12,11 +12,17 @@ namespace MovieFlixApi.Repository
         public Task<Show> Get(int objId)
         {
             throw new NotImplementedException();
+
+
+
+
         }
 
         public Task<Show> Post()
         {
             throw new NotImplementedException();
+
+
         }
 
         public Task<Show> UpdateShow(int objId)
